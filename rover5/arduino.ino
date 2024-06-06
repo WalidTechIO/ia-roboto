@@ -1,11 +1,12 @@
 
 enum Command {
-  ERREUR,
-  MOTEUR_G_AV,
-  MOTEUR_G_AR,
-  MOTEUR_D_AV,
-  MOTEUR_D_AR,
-  MOTEURS_STOP
+    ERREUR,
+    MOTEUR_G_AV,
+    MOTEUR_G_AR,
+    MOTEUR_D_AV,
+    MOTEUR_D_AR,
+    MOTEURS_STOP,
+    BUZZ
 };
 
 void init_buffer();
@@ -17,6 +18,7 @@ void moteur_droit_avant();
 void moteur_gauche_arriere();
 void moteur_droit_arriere();
 void moteurs_stop();
+void buzz();
 
 #define BUF_IN 200    // taille max du buffer de lecture
 #define LCMD 50     // taille max du tableau de la liste de commandes
@@ -32,14 +34,16 @@ int E1 = 10;  // vitesse moteur 1
 int M1 = 12;  // sens moteur 1
 int E2 = 11;  // vitesse moteur 2
 int M2 = 13;  // sens moteur 2
+int BUZZER = 4;
 
 void setup() {
-  init_buffer();
-  pinMode(M1, OUTPUT);   
-  pinMode(M2, OUTPUT);
-  moteurs_stop();
-  Serial.begin(9600);
-  Serial.println("OK Arduino"); 
+    init_buffer();
+    pinMode(M1, OUTPUT);   
+    pinMode(M2, OUTPUT);
+    pinMode(BUZZER, OUTPUT);
+    moteurs_stop();
+    Serial.begin(9600);
+    Serial.println("OK Arduino"); 
 }
 
 int c = -1;
@@ -50,15 +54,15 @@ void loop() {
     c_prec = c;
     c = Serial.read();
     if ((c == '[') && (c_prec == '[')) {
-      init_buffer();
-      buf_in[buf_in_count++] = '[';
+        init_buffer();
+        buf_in[buf_in_count++] = '[';
     }
     else if ((c == ']') && (c_prec == ']')) {
-      decode_sequence();
-      lcmd_pos = 0;
+        decode_sequence();
+        lcmd_pos = 0;
     }
     else if (c != '\n') {
-      buf_in[buf_in_count++] = c;
+        buf_in[buf_in_count++] = c;
     }
   }
   exec_cmd();
@@ -87,8 +91,10 @@ void decode_sequence() {
                 cmd = MOTEUR_D_AR;
             } else if (strncmp(&buf_in[pos], "stp]", 4) == 0) {
                 cmd = MOTEURS_STOP;
+            } else if(strncmp(&buf_in[pos], "bip]", 4) == 0) {
+                cmd = BUZZ;
             }
-            
+
             lcmd[lcmd_count++] = cmd;
             while (buf_in[pos] != ']' && pos < buf_in_count) pos++;
         }
@@ -102,26 +108,15 @@ void decode_sequence() {
 /*******************************************************************/
 
 void exec_cmd() {
-  if (lcmd_pos >= lcmd_count) return;
+    if (lcmd_pos >= lcmd_count) return;
 
-  int cmd = lcmd[lcmd_pos++];
-  switch(cmd) {
-    case MOTEUR_G_AV:
-      moteur_gauche_avant();
-      break;
-    case MOTEUR_G_AR:
-      moteur_gauche_arriere();
-      break;
-    case MOTEUR_D_AV:
-      moteur_droit_avant();
-      break;
-    case MOTEUR_D_AR:
-      moteur_droit_arriere();
-      break;
-    case MOTEURS_STOP:
-      moteurs_stop();
-      break;
-  }
+    int cmd = lcmd[lcmd_pos++];
+    if (cmd == MOTEUR_G_AV) moteur_gauche_avant();
+    else if (cmd == MOTEUR_D_AV) moteur_droit_avant();
+    else if (cmd == MOTEUR_G_AR) moteur_gauche_arriere();
+    else if (cmd == MOTEUR_D_AR) moteur_droit_arriere();
+    else if (cmd == MOTEURS_STOP) moteurs_stop();
+    else if (cmd == BUZZ) buzz();
 }
 
 /*******************************************************************/
@@ -129,10 +124,10 @@ void exec_cmd() {
 /*******************************************************************/
 
 void init_buffer() {
-  for (int i=0 ; i<BUF_IN ; i++) {
-    buf_in[i] = 0;
-  }
-  buf_in_count = 0;
+    for (int i=0 ; i<BUF_IN ; i++) {
+        buf_in[i] = 0;
+    }
+    buf_in_count = 0;
 }
 
 /*******************************************************************/
@@ -140,8 +135,8 @@ void init_buffer() {
 /*******************************************************************/
 
 void moteur_gauche_avant() {
-  digitalWrite(M1,LOW);
-  analogWrite(E1, 255);
+    digitalWrite(M1,LOW);
+    analogWrite(E1, 255);
 }
 
 /*******************************************************************/
@@ -149,8 +144,8 @@ void moteur_gauche_avant() {
 /*******************************************************************/
 
 void moteur_gauche_arriere() {
-  digitalWrite(M1,HIGH);
-  analogWrite(E1, 255);
+    digitalWrite(M1,HIGH);
+    analogWrite(E1, 255);
 }
 
 /*******************************************************************/
@@ -158,8 +153,8 @@ void moteur_gauche_arriere() {
 /*******************************************************************/
 
 void moteur_droit_avant() {
-  digitalWrite(M2,LOW);
-  analogWrite(E2, 255);
+    digitalWrite(M2,LOW);
+    analogWrite(E2, 255);
 }
 
 /*******************************************************************/
@@ -167,8 +162,8 @@ void moteur_droit_avant() {
 /*******************************************************************/
 
 void moteur_droit_arriere() {
-  digitalWrite(M2,HIGH);
-  analogWrite(E2, 255);
+    digitalWrite(M2,HIGH);
+    analogWrite(E2, 255);
 }
 
 /*******************************************************************/
@@ -176,6 +171,16 @@ void moteur_droit_arriere() {
 /*******************************************************************/
 
 void moteurs_stop() {
-  analogWrite(E1, 0);
-  analogWrite(E2, 0);
+    analogWrite(E1, 0);
+    analogWrite(E2, 0);
+}
+
+/*******************************************************************/
+/******************************* buzz ******************************/
+/*******************************************************************/
+
+void buzz() {
+    digitalWrite(BUZZER, HIGH);
+    delay(1000);
+    digitalWrite(BUZZER, LOW);
 }
