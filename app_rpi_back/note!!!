@@ -1,0 +1,1 @@
+La librairire node-webcam a été modifié notamment le fichier webcams/FSWebcam.js afin d'y ajouter le flag -p YUYV (contrainte de la webcam utilisée pour le projet)

@@ -1,0 +1,64 @@
+.alert {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.375rem;
+}
+
+.alert-info {
+    color: #055160;
+    background-color: #cff4fc;
+    border-color: #b6effb;
+}
+
+.alert-dismissible {
+    padding-right: 4rem;
+}
+
+.alert-dismissible .btn-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    padding: 1.25rem 1rem;
+}
+
+.fade {
+    transition: opacity 0.15s linear;
+}
+
+.show {
+    display: block;
+    opacity: 1;
+}
+
+.btn-close {
+    box-sizing: content-box;
+    width: 1em;
+    height: 1em;
+    padding: 0.25em 0.25em;
+    color: #000;
+    background: transparent url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M1 1l14 14M1 15L15 1'/%3E%3C/svg%3E") center/1em auto no-repeat;
+    border: 0;
+    border-radius: 0.25rem;
+    opacity: 0.5;
+}
+
+.btn-close:hover {
+    color: #000;
+    text-decoration: none;
+    opacity: 0.75;
+}
+
+.btn-close:focus {
+    outline: 0;
+    box-shadow: none;
+    opacity: 1;
+}
+
+.btn-close:disabled,
+.btn-close.disabled {
+    pointer-events: none;
+    opacity: 0.25;
+}

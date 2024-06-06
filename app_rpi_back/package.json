@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "dependencies": {
+    "node-webcam": "^0.8.2",
+    "serialport": "^12.0.0",
+    "ws": "^8.17.0"
+  }
+}
