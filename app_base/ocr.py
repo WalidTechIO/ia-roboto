@@ -1,6 +1,7 @@
 import easyocr
 import json
 import websockets
+import re
 from mode import Mode
 #pip install torch torchvision torchaudio easyocr websockets
 class OCR(Mode):
