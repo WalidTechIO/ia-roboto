@@ -7,16 +7,24 @@ import { useState } from 'react'
 function App() {
   const [modal, setModal] = useState(undefined)
   const [image, setImage] = useState(undefined)
+  const [box, setBox] = useState({print: false, coords: undefined, color: undefined})
 
   const showModal = msg => {
     setModal(<Modal message={msg} callback={() => setModal(undefined)} />)
   }
 
+  const showBox = (coords, color) => {
+    setBox({print: true, coords, color})
+    setTimeout(() => {
+      setBox({ print: false, coords: undefined, color: undefined })
+    }, 333)
+  }
+
   const receive = msg => {
     switch(msg.type) {
       case "location":
-        console.log("Localisation du robot : " + msg.payload)
-        showModal("Emplacement du robot détecté: " + msg.payload)
+        showModal("Emplacement du robot détecté: " + msg.payload[1])
+        showBox(msg.payload[0], msg.payload[2])
         break
       case "photo":
         setImage(msg.payload)
@@ -50,8 +58,9 @@ function App() {
           </div>
         </div>
       </div>
-      <div>
+      <div className="img-container">
         <img alt="Vue du robot" src={image}/>
+        {box.print && <div className="box" style={{top: box.coords?.top, left: box.coords?.left, height: box.coords?.height, width: box.coords?.width, borderColor: box.color}}></div>}
       </div>
     </div>
   )

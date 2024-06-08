@@ -83,17 +83,11 @@ body {
   font-size: 2em;
 }
 
-.fixed-image {
-  position: fixed;
-  top: 50%;
-  right: 0;
-  width: 480px;
-  transform: translateY(-50%);
-  overflow: hidden;
+.img-container {
+  position: relative;
 }
 
-.fixed-image img {
-  width: 100%;
-  height: auto;
-  display: block;
+.box {
+  border: 2px solid;
+  position: absolute;
 }
