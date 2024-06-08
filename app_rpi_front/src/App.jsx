@@ -9,12 +9,9 @@ function App() {
   const [image, setImage] = useState(undefined)
   const [box, setBox] = useState({print: false, coords: undefined, color: undefined})
 
-  const showModal = msg => {
-    setModal(<Modal message={msg} callback={() => setModal(undefined)} />)
-  }
-
-  const showBox = (coords, color) => {
-    setBox({print: true, coords, color})
+  const handleLocationMessage = payload => {
+    setModal(<Modal message={"Emplacement du robot détecté: " + payload[1]} callback={() => setModal(undefined)} delay={1500}/>)
+    setBox({print: true, coords: payload[0], color: payload[2]})
     setTimeout(() => {
       setBox({ print: false, coords: undefined, color: undefined })
     }, 333)
@@ -23,8 +20,7 @@ function App() {
   const receive = msg => {
     switch(msg.type) {
       case "location":
-        showModal("Emplacement du robot détecté: " + msg.payload[1])
-        showBox(msg.payload[0], msg.payload[2])
+        handleLocationMessage(msg.payload)
         break
       case "photo":
         setImage(msg.payload)

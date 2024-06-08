@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import '../assets/Modal.css'
 
-export default function Modal({ callback, message }) {
+export default function Modal({ callback, message, delay }) {
 
     useEffect(() => {
-        const timeout = setTimeout(callback, 5000)
+        const timeout = setTimeout(callback, delay)
 
         return () => {
             clearTimeout(timeout)
