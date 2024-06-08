@@ -13,8 +13,9 @@ export default function Modal({ callback, message, delay }) {
 
     const style = {
         position: "absolute",
-        bottom: "0",
-        right: "20px"
+        bottom: "0px",
+        right: "20px",
+        zIndex: "1000"
     }
 
     return <div style={style}>

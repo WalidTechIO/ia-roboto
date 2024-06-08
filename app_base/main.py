@@ -5,6 +5,7 @@ import base64
 import sys
 from mode import Mode
 from ocr import OCR
+from chiffres import Chiffres
 
 async def process_message(message: str, websocket: websockets.WebSocketClientProtocol, mode: Mode) -> None:
     """Process the received message."""
@@ -42,6 +43,8 @@ def main() -> None:
     match sys.argv[1]:
         case "ocr":
             mode = OCR()
+        case "chiffre":
+            mode = Chiffres()
         case _:
             print("Invalid mode")
             exit()
